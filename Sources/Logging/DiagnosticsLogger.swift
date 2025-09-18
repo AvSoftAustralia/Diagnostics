@@ -69,7 +69,7 @@ public final class DiagnosticsLogger: Sendable {
     ///   - function: The functino from which the log is send. Defaults to `#function`.
     ///   - line: The line from which the log is send. Defaults to `#line`.
     public static func log(message: String, file: String = #file, function: String = #function, line: UInt = #line) {
-        standard.log(LogItem(.debug(message: message), file: file, function: function, line: line))
+        standard.log(LogItem(.debug(message: message.htmlEscaped), file: file, function: function, line: line))
     }
 
     /// Logs the given error for the diagnostics report.
@@ -215,5 +215,16 @@ private extension FileManager {
         } else {
             return false
         }
+    }
+}
+
+private extension String {
+    var htmlEscaped: String {
+        self
+            .replacingOccurrences(of: "&", with: "&amp;")
+            .replacingOccurrences(of: "<", with: "&lt;")
+            .replacingOccurrences(of: ">", with: "&gt;")
+            .replacingOccurrences(of: "\"", with: "&quot;")
+            .replacingOccurrences(of: "'", with: "&#39;")
     }
 }

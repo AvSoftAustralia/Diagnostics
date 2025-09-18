@@ -49,10 +49,6 @@ struct LogsReporter: DiagnosticsReporting {
 
 extension LogsReporter: HTMLFormatting {
     static func format(_ diagnostics: Diagnostics) -> HTML {
-        if let string = diagnostics as? String {
-            return "<div id=\"log-sessions\">\(string.htmlEscaped)</div>"
-
-        }
         return "<div id=\"log-sessions\">\(diagnostics)</div>"
     }
 }
@@ -60,16 +56,5 @@ extension LogsReporter: HTMLFormatting {
 private extension String {
     var isOldStyleSession: Bool {
         !contains("class=\"session-header")
-    }
-}
-
-extension String {
-    var htmlEscaped: String {
-        self
-            .replacingOccurrences(of: "&", with: "&amp;")
-            .replacingOccurrences(of: "<", with: "&lt;")
-            .replacingOccurrences(of: ">", with: "&gt;")
-            .replacingOccurrences(of: "\"", with: "&quot;")
-            .replacingOccurrences(of: "'", with: "&#39;")
     }
 }

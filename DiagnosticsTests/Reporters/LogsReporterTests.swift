@@ -33,7 +33,18 @@ final class LogsReporterTests: XCTestCase {
         XCTAssertTrue(debugLog.contains("<span class=\"log-prefix\">LogsReporterTests.swift:L28</span>"), "Prefix should be added")
         XCTAssertTrue(debugLog.contains("<span class=\"log-message\">&lt;b&gt;\(identifier)&lt;/b&gt;</span>"), "Log message should be added to \(debugLog)")
     }
-
+    /// It should show logged messages, escapig XML
+    func testMessagesLogWithXML() throws {
+        let identifier = UUID().uuidString
+        let message = "<b>\(identifier)</b>"
+        DiagnosticsLogger.log(message: message)
+        let diagnostics = LogsReporter().report().diagnostics as! String
+        XCTAssertTrue(diagnostics.contains(identifier), "Diagnostics is \(diagnostics)")
+        XCTAssertEqual(diagnostics.debugLogs.count, 1)
+        let debugLog = try XCTUnwrap(diagnostics.debugLogs.first)
+        XCTAssertTrue(debugLog.contains("<span class=\"log-prefix\">LogsReporterTests.swift:L40</span>"), "Prefix should be added")
+        XCTAssertTrue(debugLog.contains("<span class=\"log-message\">&lt;b&gt;\(identifier)&lt;/b&gt;</span>"), "Log message should be added to \(debugLog)")
+    }
     /// It should show errors.
     func testErrorLog() throws {
         enum Error: LocalizedError {
