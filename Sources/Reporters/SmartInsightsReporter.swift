@@ -31,7 +31,7 @@ public protocol SmartInsightProviding {
     var name: String { get }
 
     /// Generates the result of this insight, see `InsightResult`.
-    nonisolated(nonsending) func generateResult() async -> InsightResult?
+    nonisolated func generateResult() async -> InsightResult?
 }
 
 /// Reports smart insights based on given variables.
@@ -52,7 +52,7 @@ public struct SmartInsightsReporter: DiagnosticsReporting {
         insights = defaultInsights.compactMap { $0 }
     }
 
-    public nonisolated(nonsending) func report() async -> DiagnosticsChapter {
+    public nonisolated func report() async -> DiagnosticsChapter {
         var metadata: [String: String] = [:]
         
         for insight in insights {

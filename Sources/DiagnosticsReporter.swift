@@ -10,7 +10,7 @@ import Foundation
 
 public protocol DiagnosticsReporting {
     /// Creates the report chapter.
-    nonisolated(nonsending) func report() async -> DiagnosticsChapter
+    nonisolated func report() async -> DiagnosticsChapter
 }
 
 public enum DiagnosticsReporter {
@@ -48,7 +48,7 @@ public enum DiagnosticsReporter {
     ///   - filename: The filename to use for the report.
     ///   - reportTitle: The title that is used in the header of the web page of the report. Defaults to `<App Name> - Diagnostics Report`.
     /// - Returns: The generated report.
-    public nonisolated(nonsending) static func create(
+    public nonisolated static func create(
         filename: String = "Diagnostics-Report.html",
         using reporters: [DiagnosticsReporting] = DefaultReporter.allReporters,
         filters: [DiagnosticsReportFilter.Type]? = nil,

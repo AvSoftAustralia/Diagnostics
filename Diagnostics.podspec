@@ -63,7 +63,8 @@ Create HTML of diagnostic information from iOS apps
   #  the deployment target. You can optionally include the target after the platform.
   #
 
-  # spec.platform     = :ios
+  spec.platform     = :ios, "15.0"
+  spec.swift_versions    = "5.10", "6.0"
   # spec.platform     = :ios, "5.0"
 
   #  When using multiple platforms
@@ -91,7 +92,7 @@ Create HTML of diagnostic information from iOS apps
   #  Not including the public_header_files will make all headers public.
   #
 
-  spec.source_files  = "Classes", "Classes/**/*.{h,m}"
+  spec.source_files  = "Sources/*.swift", "Classes/**/*.{h,m}", "Package.swift"
   spec.exclude_files = "Classes/Exclude"
 
   # spec.public_header_files = "Classes/**/*.h"
