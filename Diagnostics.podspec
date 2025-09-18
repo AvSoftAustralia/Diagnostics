@@ -6,6 +6,13 @@
 #  To see working Podspecs in the CocoaPods repo see https://github.com/CocoaPods/Specs/
 #
 
+Pod::Spec.new do |ss|
+  ss.name = 'ExceptionCatcherInternal'
+    ss.source_files = 'ExceptionCatcher/Sources/ExceptionCatcherInternal/*/*.{swift,m,h}', 'ExceptionCatcher/Sources/ExceptionCatcherInternal/include/*.{swift,m,h}'
+    # pull in the catcher code from submodule or folder
+    ss.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+  end
+
 Pod::Spec.new do |spec|
 
   # ―――  Spec Metadata  ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -18,9 +25,6 @@ Pod::Spec.new do |spec|
   spec.name         = "Diagnostics"
   spec.version      = "6.0.0"
   spec.summary      = "A POD to do ios diags"
-  spec.prepare_command = <<-CMD
-    git submodule update --init --recursive
-  CMD
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -139,8 +143,13 @@ Create HTML of diagnostic information from iOS apps
   # spec.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # spec.dependency "JSONKit", "~> 1.4"
 
+  spec.subspec 'ExceptionCatcherInternal' do |ss|
+    ss.source_files = 'ExceptionCatcher/Sources/ExceptionCatcherInternal/*/*.{swift,m,h}', 'ExceptionCatcher/Sources/ExceptionCatcherInternal/include/*.{swift,m,h}'
+    # pull in the catcher code from submodule or folder
+    ss.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+  end
   spec.subspec 'ExceptionCatcher' do |ss|
-    ss.source_files = 'ExceptionCatcher/Sources/**/**/*.{swift}'
+    ss.source_files = 'ExceptionCatcher/Sources/**/**/*.{swift,m,h}', 'ExceptionCatcher/Sources/ExceptionCatcherInternal/*/*.{swift,m,h}', 'ExceptionCatcher/Sources/ExceptionCatcherInternal/include/*.{swift,m,h}'
     # pull in the catcher code from submodule or folder
     ss.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   end
