@@ -18,6 +18,9 @@ Pod::Spec.new do |spec|
   spec.name         = "Diagnostics"
   spec.version      = "6.0.0"
   spec.summary      = "A POD to do ios diags"
+  spec.prepare_command = <<-CMD
+    git submodule update --init --recursive
+  CMD
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -81,7 +84,7 @@ Create HTML of diagnostic information from iOS apps
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  spec.source       = { :git => "https://github.com/AvSoftAustralia/Diagnostics.git", :tag => "#{spec.version}" }
+  spec.source       = { :git => "https://github.com/AvSoftAustralia/Diagnostics.git", :tag => "#{spec.version}", :submodules => true }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -92,7 +95,7 @@ Create HTML of diagnostic information from iOS apps
   #  Not including the public_header_files will make all headers public.
   #
 
-  spec.source_files  = "Sources/*.swift", "Classes/**/*.{h,m}"
+  spec.source_files  = "Sources/*.swift", "Sources/**/*.{h,m,swift}"
   spec.exclude_files = "Classes/Exclude"
 
   # spec.public_header_files = "Classes/**/*.h"
@@ -136,4 +139,9 @@ Create HTML of diagnostic information from iOS apps
   # spec.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   # spec.dependency "JSONKit", "~> 1.4"
 
+  spec.subspec 'ExceptionCatcher' do |ss|
+    ss.source_files = 'ExceptionCatcher/Sources/**/**/*.{swift}'
+    # pull in the catcher code from submodule or folder
+    ss.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+  end
 end
