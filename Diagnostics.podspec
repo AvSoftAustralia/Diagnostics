@@ -92,7 +92,7 @@ Create HTML of diagnostic information from iOS apps
   #  Not including the public_header_files will make all headers public.
   #
 
-  spec.source_files  = "Sources/*.swift", "Classes/**/*.{h,m}", "Package.swift"
+  spec.source_files  = "Sources/*.swift", "Classes/**/*.{h,m}"
   spec.exclude_files = "Classes/Exclude"
 
   # spec.public_header_files = "Classes/**/*.h"
