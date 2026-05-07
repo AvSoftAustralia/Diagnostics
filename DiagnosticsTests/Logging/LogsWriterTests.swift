@@ -89,6 +89,27 @@ final class LogsWriterTests: XCTestCase {
         XCTAssertLessThanOrEqual(data.count, maximumLogSize)
     }
 
+    func testTrimmingBoundsLargeExistingFileAndPreservesNewestWrite() throws {
+        var existingData = Data()
+        for index in 0..<200 {
+            existingData.append(SystemLog(line: "Old log entry \(index) \(String(repeating: "x", count: 20))").logData)
+        }
+        try existingData.write(to: tempLogFileURL)
+
+        let maximumLogSize = existingData.count - 1
+        let writer = LogsWriter(logFileLocation: tempLogFileURL, maximumLogSize: maximumLogSize)
+
+        writer.write(SystemLog(line: "Newest log entry"))
+
+        let data = try Data(contentsOf: tempLogFileURL)
+        let contents = String(decoding: data, as: UTF8.self)
+
+        XCTAssertLessThanOrEqual(data.count, maximumLogSize)
+        XCTAssertLessThanOrEqual(data.count, maximumLogSize * 3 / 4)
+        XCTAssertTrue(contents.contains("Newest log entry"))
+        XCTAssertFalse(contents.contains("Old log entry 0 "))
+    }
+
     func testNoTrimmingWhenUnderMaxSize() throws {
         let writer = LogsWriter(logFileLocation: tempLogFileURL, maximumLogSize: 500)
         let log = SystemLog(line: "Small log entry")

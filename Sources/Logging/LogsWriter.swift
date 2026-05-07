@@ -31,7 +31,7 @@ struct LogsWriter {
     }
     
     private func trimLinesIfNecessary(logSize: UInt64) {
-        guard logSize > maximumLogSize else { return }
+        guard maximumLogSize >= 0, logSize > UInt64(maximumLogSize) else { return }
 
         guard
             var data = try? Data(contentsOf: self.logFileLocation, options: .mappedIfSafe),
@@ -39,8 +39,9 @@ struct LogsWriter {
             return assertionFailure("Trimming the current log file failed")
         }
 
-        let trimmer = LogsTrimmer(numberOfLinesToTrim: 10)
-        trimmer.trim(data: &data)
+        let trimmer = LogsTrimmer()
+        let targetLogSize = maximumLogSize * 3 / 4
+        guard trimmer.trim(data: &data, maximumSize: maximumLogSize, targetSize: targetLogSize) else { return }
 
         guard (try? data.write(to: logFileLocation, options: .atomic)) != nil else {
             return assertionFailure("Could not write trimmed log to target file location: \(logFileLocation)")
